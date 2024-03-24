@@ -1,6 +1,7 @@
 package Excel;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Scanner;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -58,7 +59,7 @@ public static void main(String[] args) throws IOException {
 		workbook.close();
 		file.close();
 		
-		System.out.println("Writing is done!!!!");
+		System.out.println("Writing is done in excel!!!!");
 		
 	}
 
