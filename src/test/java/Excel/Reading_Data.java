@@ -19,8 +19,8 @@ public class Reading_Data {
 		int totalrows = sheet.getLastRowNum();
 		int totalcells = sheet.getRow(1).getLastCellNum();
 		
-		System.out.println(totalrows);
-		System.out.println(totalcells);
+		System.out.println("Toatl rows : " + totalrows);
+		System.out.println("Toatl cells : " + totalcells);
 		
 		for(int r=0;r<=totalrows;r++)
 		{
@@ -31,7 +31,7 @@ public class Reading_Data {
 				//XSSFCell cell=currentRow.getCell(c);
 				//String value=cell.toString();
 				String value = currentRow.getCell(c).toString();
-				System.out.print(value+"      ");
+				System.out.print(value +"      ");
 			}
 			System.out.println();
 		}
