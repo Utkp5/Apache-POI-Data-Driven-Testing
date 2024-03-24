@@ -1,0 +1,22 @@
+Apache poi - API used for automating ms documents- excel.
+
+reading data from excel
+writing data into excel
+
+
+
+//These are the methods that we use to handle the excel file..		 
+
+	Excel File-->Workbook-->Sheets---->Rows--->Cells
+		
+	FileInputStream
+	FileOutputStream
+
+	XSSFWorkbook
+	XSSFSheet
+	XSSFRow
+	XSSFCell
+	
+	add these 2 dependencies 
+	---> Apache POI API Based On OPC and OOXML Schemas
+	---> Apache POI Common
