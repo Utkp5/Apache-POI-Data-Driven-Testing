@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -105,7 +106,9 @@ public class Excel_Utility {
 		
 		style.setFillForegroundColor(IndexedColors.GREEN.getIndex());
 		style.setFillPattern(FillPatternType.SOLID_FOREGROUND); 
-				
+		style.setBorderBottom(BorderStyle.THIN);		
+		style.setBorderRight(BorderStyle.THIN);
+		
 		cell.setCellStyle(style);
 		fo=new FileOutputStream(xlfile);
 		wb.write(fo);
@@ -127,6 +130,8 @@ public class Excel_Utility {
 		
 		style.setFillForegroundColor(IndexedColors.RED.getIndex());
 		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);  
+		style.setBorderBottom(BorderStyle.THIN);
+		style.setBorderRight(BorderStyle.THIN);
 		
 		cell.setCellStyle(style);		
 		fo=new FileOutputStream(xlfile);

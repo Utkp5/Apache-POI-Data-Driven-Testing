@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class Fixed_Deposit_Calculator {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		WebDriver driver=new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
