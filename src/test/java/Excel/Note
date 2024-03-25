@@ -3,7 +3,7 @@ Apache poi - API used for automating ms documents- excel.
 reading data from excel
 writing data into excel
 
-
+erase the result column data from caldata xl bcz it will auto fill once test script will run.. 
 
 //These are the methods that we use to handle the excel file..		 
 
