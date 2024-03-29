@@ -18,79 +18,76 @@ public class CIT_Bank {
 		
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.manage().window().maximize();
+		
 		driver.get("https://www.cit.com/cit-bank/resources/calculators/certificate-of-deposit-calculator/");
+		driver.manage().window().maximize();
+				
+		WebElement inideposit = driver.findElement(By.xpath("//input[@id='mat-input-0']"));		
+		WebElement length = driver.findElement(By.xpath("//input[@id='mat-input-1']"));	
+		WebElement apr = driver.findElement(By.xpath("//input[@id='mat-input-2']"));
+		WebElement calbutton = driver.findElement(By.xpath("//button[@id='CIT-chart-submit']")); // 'Lets run the numbers' button
 		
-		String file = System.getProperty("user.dir")+"\\testdata\\caldata2.xlsx";
+		System.out.println("user has identified all elements to calculate CD");
+	
+		String path="D:\\Apache-POI-Data-Driven-Testing\\testdata\\caldata2.xlsx";   // giving path to file to start reading
+		int rows=Excel_Utility.getRowCount(path, "Sheet1");				// get a row count from the sheet
+		System.out.println("row count is : " + rows);
 		
-		int rows = Excel_Utility.getRowCount(file,"sheet1");
-		
-		for(int i=0;i<rows;i++)
-		{
-			//read data from excel
-			String dpt_amt = Excel_Utility.getCellData(file,"sheet1",i,0); //here 0 represents column no.
-			String interest_rt = Excel_Utility.getCellData(file,"sheet1",i,1);
-			String length = Excel_Utility.getCellData(file,"sheet1",i,2);
-			String compound = Excel_Utility.getCellData(file,"sheet1",i,3);
-			String total = Excel_Utility.getCellData(file,"sheet1",i,4);
-			String exp_value = Excel_Utility.getCellData(file,"sheet1",i,5);
-			
-			//before passing clr all the fields then pass data to website
-			WebElement ini_dpt_amt = driver.findElement(By.id("mat-input-0"));
-			WebElement lngth =  driver.findElement(By.id("mat-input-1"));
-			WebElement intrst_rt = driver.findElement(By.id("mat-input-2"));
-			WebElement cal_btn =  driver.findElement(By.xpath("//button[@id='CIT-chart-submit']/div"));
-			
-			ini_dpt_amt.clear();
-			lngth.clear();
-			intrst_rt.clear();
-			Thread.sleep(2000);
-			ini_dpt_amt.sendKeys(dpt_amt);
-			lngth.sendKeys(interest_rt);
-			intrst_rt.sendKeys(length);
-			
+		for(int i=1;i<=rows;i++)
+		{			
+			//Reading data from excel
+			String inidepo= Excel_Utility.getCellData(path,"Sheet1",i,0);				//file,sheet,row #, col zero for initial deposit
+			String interestrate=Excel_Utility.getCellData(path,"Sheet1",i, 1);		//interest rate
+			String monthlength=Excel_Utility.getCellData(path,"Sheet1",i, 2);			//length
+			String compoundingmonths=Excel_Utility.getCellData(path,"Sheet1",i, 3);	//compounding
+			String exptotal=Excel_Utility.getCellData(path,"Sheet1",i, 4);	//expected total , will be compared with actual total
 
+			//passing the data into the application
+			inideposit.clear();
+			length.clear();
+			apr.clear();
+			Thread.sleep(3000);
+			inideposit.sendKeys(inidepo);   //using webelement and passing the values from xl cell data
+			length.sendKeys(monthlength);
+			apr.sendKeys(interestrate);
+						
 			//Dropdown (Boostrap) - Not having Select Tag
-			WebElement compoundrp = driver.findElement(By.xpath("//mat-select[@id='mat-select-0']"));  
+			WebElement compoundrp = driver.findElement(By.xpath("//mat-select[@id='mat-select-0']"));   //select class object compounddrp will find elelment by id
 			compoundrp.click();
 			
-            List<WebElement> options=driver.findElements(By.xpath("//div[@id='mat-select-0-panel']//mat-option"));
+			List<WebElement> options=driver.findElements(By.xpath("//div[@id='mat-select-0-panel']//mat-option"));
 			
 			for(WebElement option:options)
 			{
-				if(option.getText().equals(compound))
+				if(option.getText().equals(compoundingmonths))
 					option.click();
 			}
 			
-			//cal_btn.click();
+					
+			calbutton.click();   ///click on button to calculate cd calculation based on xl cell data
+			String acttotal = driver.findElement(By.xpath("//span[@id='displayTotalValue']")).getText();
 			
-			//validation & update results in excel
-			String act_value = driver.findElement(By.id("displayTotalValue")).getText();
-			System.out.println(act_value);
+			System.out.println("act total is: " + acttotal);
+			System.out.println("exp total is: " + exptotal);
 			
-			Thread.sleep(2000);
-			
-			//clear all the fields
-			driver.findElement(By.id("mat-input-0")).clear();
-			driver.findElement(By.id("mat-input-1")).clear();
-			driver.findElement(By.id("mat-input-2")).clear();
-			
-			
+			if(exptotal.equals(acttotal)) {			//if expected total = actual total then			
+				
+				Excel_Utility.setCellData(path, "Sheet1",i, 6,"Passed");	//setting passed in 6th column (index start with zero)
+				Excel_Utility.fillGreenColor(path, "Sheet1",i, 6);	//filling the color in 6th column if passed then greeen or faile then red.
+			}
+			else
+			{
+				Excel_Utility.setCellData(path, "Sheet1",i, 6,"Failed");
+				Excel_Utility.fillRedColor(path, "Sheet1",i, 6);
+			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	}
+			System.out.println("calculation has been completed");
+			driver.close();
+			
+			
+	}			
+			
+	
 }
+
+
